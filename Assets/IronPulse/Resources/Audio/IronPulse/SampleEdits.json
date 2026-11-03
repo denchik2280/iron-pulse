@@ -1,0 +1,522 @@
+[
+  {
+    "asset": "pistol/a_42p_1.wav",
+    "source": "firearms/Prepared SFX Library/1911/A_42P.wav",
+    "start": 0.93847,
+    "end": 1.78847,
+    "seconds": 0.85,
+    "rms": 0.06711,
+    "peak": 0.87,
+    "sha256": "b4a57c03c42be321a84e3a6a3795bc4bbb61fd0b4901308b05891b0b63d3377b"
+  },
+  {
+    "asset": "pistol/a_42p_2.wav",
+    "source": "firearms/Prepared SFX Library/1911/A_42P.wav",
+    "start": 4.99854,
+    "end": 5.84854,
+    "seconds": 0.85,
+    "rms": 0.06359,
+    "peak": 0.87,
+    "sha256": "2802352f6b80c8b8adac3c294e5e1be11d59f3c0a6c9a7a0f7a6343ebe54eee1"
+  },
+  {
+    "asset": "pistol/x_39p_1.wav",
+    "source": "firearms/Prepared SFX Library/Walther PPQ/X_39P.wav",
+    "start": 1.40394,
+    "end": 2.25394,
+    "seconds": 0.85,
+    "rms": 0.06075,
+    "peak": 0.87,
+    "sha256": "2a3e8386aadf578f746598a6e8e61cace9c481c04141e689fde2b116f4237563"
+  },
+  {
+    "asset": "pistol/x_39p_2.wav",
+    "source": "firearms/Prepared SFX Library/Walther PPQ/X_39P.wav",
+    "start": 6.44144,
+    "end": 7.29144,
+    "seconds": 0.85,
+    "rms": 0.05605,
+    "peak": 0.87,
+    "sha256": "50e516fcb37a30b8284981de7e6941e6e6a3f3dd5176539791c85505b16fd784"
+  },
+  {
+    "asset": "rifle/d_32p_1.wav",
+    "source": "firearms/Prepared SFX Library/AR-15/D_32P.wav",
+    "start": 0.70073,
+    "end": 1.35073,
+    "seconds": 0.65,
+    "rms": 0.07112,
+    "peak": 0.87,
+    "sha256": "ec31c812bbdf11ddf5d3ba3de1a3bffe4f2f9d21fad9eeadc3ecc467e2c204ef"
+  },
+  {
+    "asset": "rifle/d_32p_2.wav",
+    "source": "firearms/Prepared SFX Library/AR-15/D_32P.wav",
+    "start": 5.64443,
+    "end": 6.29443,
+    "seconds": 0.65,
+    "rms": 0.06842,
+    "peak": 0.87,
+    "sha256": "5129bc03df6fc8d86f1ef8b4a16dce06e2816ad02ff05605059ca811da479b5e"
+  },
+  {
+    "asset": "rifle/c_28p_1.wav",
+    "source": "firearms/Prepared SFX Library/AK-47/C_28P.wav",
+    "start": 0.60817,
+    "end": 1.25817,
+    "seconds": 0.65,
+    "rms": 0.08769,
+    "peak": 0.87,
+    "sha256": "7fd188f0c8696f16e35e83b09448c063aad697cf1ba397bf99c86f57612b29a3"
+  },
+  {
+    "asset": "rifle/c_28p_2.wav",
+    "source": "firearms/Prepared SFX Library/AK-47/C_28P.wav",
+    "start": 3.25439,
+    "end": 3.90439,
+    "seconds": 0.65,
+    "rms": 0.07751,
+    "peak": 0.87,
+    "sha256": "378b487d07eecbb21c52717c7981cca2319c7cdae79f293e657c1584a6f8ff38"
+  },
+  {
+    "asset": "shotgun/n_30p_1.wav",
+    "source": "firearms/Prepared SFX Library/Mossberg/N_30P.wav",
+    "start": 1.69379,
+    "end": 2.81379,
+    "seconds": 1.12,
+    "rms": 0.05693,
+    "peak": 0.87,
+    "sha256": "e794e2a054c58c98ae995f8ae727d87177918acfcfbacb3cb28e472719123972"
+  },
+  {
+    "asset": "shotgun/n_30p_2.wav",
+    "source": "firearms/Prepared SFX Library/Mossberg/N_30P.wav",
+    "start": 4.95828,
+    "end": 6.07828,
+    "seconds": 1.12,
+    "rms": 0.05793,
+    "peak": 0.87,
+    "sha256": "cd46efbdd4dcf2e27d56844314713771242f3989944faa9eb7e8a54dfe375553"
+  },
+  {
+    "asset": "shotgun/k_22p_1.wav",
+    "source": "firearms/Prepared SFX Library/Model 12/K_22P.wav",
+    "start": 0.83917,
+    "end": 1.95917,
+    "seconds": 1.12,
+    "rms": 0.06063,
+    "peak": 0.87,
+    "sha256": "2e356945fb4defed7495a4629288727254b692edd82ee1015f1fa5f36fb17735"
+  },
+  {
+    "asset": "shotgun/k_22p_2.wav",
+    "source": "firearms/Prepared SFX Library/Model 12/K_22P.wav",
+    "start": 7.44245,
+    "end": 8.56245,
+    "seconds": 1.12,
+    "rms": 0.05733,
+    "peak": 0.87,
+    "sha256": "d3a3786b86745380e561ef9a9a47a2f11b919e28142a3bdc5ee3ce53913c2bc1"
+  },
+  {
+    "asset": "mechanism_open/hinge_unlock.wav",
+    "source": "reload/ShotgunSounds/Rack.mp3",
+    "start": 0.59,
+    "end": 0.8,
+    "seconds": 0.21,
+    "rms": 0.1781,
+    "peak": 0.79,
+    "sha256": "8871a7ccf178a689e24eb1cb9c4a71020152d96d1a242b31220758b77fc296c2"
+  },
+  {
+    "asset": "mechanism_open/action_unlock.wav",
+    "source": "reload/ShotgunSounds/Shell in Chamber.mp3",
+    "start": 0.485,
+    "end": 0.67,
+    "seconds": 0.185,
+    "rms": 0.07081,
+    "peak": 0.79,
+    "sha256": "387971b5a482ff24eb2485ec5c3142834bb02bde0f5834d660926b6427b3338e"
+  },
+  {
+    "asset": "mechanism_close/hinge_lock.wav",
+    "source": "reload/ShotgunSounds/Rack.mp3",
+    "start": 0.8,
+    "end": 1.1,
+    "seconds": 0.3,
+    "rms": 0.16334,
+    "peak": 0.79,
+    "sha256": "f6d8cd10cee26df9f7b9d0f0a4a31399030b31e61a42366d6fb048788229e171"
+  },
+  {
+    "asset": "mechanism_close/action_lock.wav",
+    "source": "reload/ShotgunSounds/Shell in Chamber.mp3",
+    "start": 1.04,
+    "end": 1.4,
+    "seconds": 0.36,
+    "rms": 0.15759,
+    "peak": 0.79,
+    "sha256": "5a8de18359af4130a0c78f5785d8d8115124b1745fce31cc0882a081359c7bf3"
+  },
+  {
+    "asset": "mechanism_shell/shell_insert_1.wav",
+    "source": "reload/ShotgunSounds/First Shell.mp3",
+    "start": 0.34,
+    "end": 0.64,
+    "seconds": 0.3,
+    "rms": 0.09088,
+    "peak": 0.79,
+    "sha256": "8f7e6df0068eefe743f3e46f472eb813c792831dbb65d62109cdf31f7b77fbcb"
+  },
+  {
+    "asset": "mechanism_shell/shell_insert_2.wav",
+    "source": "reload/ShotgunSounds/Subsequent Shells.mp3",
+    "start": 0.63,
+    "end": 0.96,
+    "seconds": 0.33,
+    "rms": 0.09229,
+    "peak": 0.79,
+    "sha256": "970067a6954c23d0c0f2b6998d6379cd43032d8cf16a2eb9de2c7f3f8e99e005"
+  },
+  {
+    "asset": "metal/impactMetal_heavy_000.wav",
+    "source": "impact/Audio/impactMetal_heavy_000.ogg",
+    "start": 0,
+    "end": 0.16766,
+    "seconds": 0.1677,
+    "rms": 0.07178,
+    "peak": 0.79,
+    "sha256": "573f718d3d0bb7953c08eba7ae8f4bdd75664ad5ab8dbf8106b0fe1065086b6b"
+  },
+  {
+    "asset": "metal/impactMetal_heavy_001.wav",
+    "source": "impact/Audio/impactMetal_heavy_001.ogg",
+    "start": 0,
+    "end": 0.35927,
+    "seconds": 0.3593,
+    "rms": 0.0516,
+    "peak": 0.79,
+    "sha256": "a3c41355dc98e35a14c22008cda3730e349a8acc1a0fd53bb2269be097491d3f"
+  },
+  {
+    "asset": "metal/impactMetal_heavy_002.wav",
+    "source": "impact/Audio/impactMetal_heavy_002.ogg",
+    "start": 0,
+    "end": 0.1173,
+    "seconds": 0.1173,
+    "rms": 0.09043,
+    "peak": 0.79,
+    "sha256": "2741a90fcffda3cef4a9c370007e0fb4116cd6efb46404238850dda3ba5f8ac6"
+  },
+  {
+    "asset": "metal/impactMetal_heavy_003.wav",
+    "source": "impact/Audio/impactMetal_heavy_003.ogg",
+    "start": 0,
+    "end": 0.20692,
+    "seconds": 0.2069,
+    "rms": 0.06679,
+    "peak": 0.79,
+    "sha256": "72bb1bb5e05decb854a277fbebac6bedab83bf19bb68b801720592796c482daa"
+  },
+  {
+    "asset": "plate/impactPlate_heavy_000.wav",
+    "source": "impact/Audio/impactPlate_heavy_000.ogg",
+    "start": 0,
+    "end": 0.48866,
+    "seconds": 0.4887,
+    "rms": 0.06333,
+    "peak": 0.7017,
+    "sha256": "6f37286c2245491860ae390fbae6391cd7ef37314399e9c53160b0c14094a7c1"
+  },
+  {
+    "asset": "plate/impactPlate_heavy_001.wav",
+    "source": "impact/Audio/impactPlate_heavy_001.ogg",
+    "start": 0,
+    "end": 0.35234,
+    "seconds": 0.3523,
+    "rms": 0.11674,
+    "peak": 0.79,
+    "sha256": "506b8d18fd5d9ff86cfd3c3d6423aaca3f243680ac09315b01911063c2553902"
+  },
+  {
+    "asset": "plate/impactPlate_heavy_002.wav",
+    "source": "impact/Audio/impactPlate_heavy_002.ogg",
+    "start": 0,
+    "end": 0.4942,
+    "seconds": 0.4942,
+    "rms": 0.07606,
+    "peak": 0.79,
+    "sha256": "54b8cc263050261a1850d4c9a6c79b9611c83742f30eb9c2000be3c62e869fa3"
+  },
+  {
+    "asset": "punch/impactPunch_heavy_000.wav",
+    "source": "impact/Audio/impactPunch_heavy_000.ogg",
+    "start": 0,
+    "end": 0.64902,
+    "seconds": 0.649,
+    "rms": 0.1114,
+    "peak": 0.79,
+    "sha256": "7026e7a79d9496400f3cd680fdf777c810fa2d3d58adf02eaff08a0f459714bf"
+  },
+  {
+    "asset": "punch/impactPunch_heavy_001.wav",
+    "source": "impact/Audio/impactPunch_heavy_001.ogg",
+    "start": 0,
+    "end": 0.53594,
+    "seconds": 0.5359,
+    "rms": 0.1209,
+    "peak": 0.79,
+    "sha256": "ce3f69abd0b545d118ed4944928417317cee0835889aa2de663a3610c1210334"
+  },
+  {
+    "asset": "punch/impactPunch_heavy_002.wav",
+    "source": "impact/Audio/impactPunch_heavy_002.ogg",
+    "start": 0,
+    "end": 0.45748,
+    "seconds": 0.4575,
+    "rms": 0.13075,
+    "peak": 0.79,
+    "sha256": "79f2a4c3b3cfc533f53dc9b2cb8e0cf0927fef7e84ee9ee01fe2bfd256c4eeab"
+  },
+  {
+    "asset": "punch/impactPunch_heavy_003.wav",
+    "source": "impact/Audio/impactPunch_heavy_003.ogg",
+    "start": 0,
+    "end": 0.47381,
+    "seconds": 0.4738,
+    "rms": 0.12146,
+    "peak": 0.79,
+    "sha256": "905d2dcd519bd27cdaab6dfef8a74423cb17e3a4de85d2d531597dc1659784fd"
+  },
+  {
+    "asset": "body/impactSoft_heavy_000.wav",
+    "source": "impact/Audio/impactSoft_heavy_000.ogg",
+    "start": 0,
+    "end": 0.5051,
+    "seconds": 0.5051,
+    "rms": 0.11975,
+    "peak": 0.79,
+    "sha256": "181633b21400e8ad7d376363ca3f87bf796c9cf6b6699d743169c31be4c6bbe9"
+  },
+  {
+    "asset": "body/impactSoft_heavy_001.wav",
+    "source": "impact/Audio/impactSoft_heavy_001.ogg",
+    "start": 0,
+    "end": 0.57204,
+    "seconds": 0.572,
+    "rms": 0.11754,
+    "peak": 0.79,
+    "sha256": "c78d50998ec10248a07d240021e5ec11b2cf3eab9404c902bbf4165af4056c96"
+  },
+  {
+    "asset": "body/impactSoft_heavy_002.wav",
+    "source": "impact/Audio/impactSoft_heavy_002.ogg",
+    "start": 0,
+    "end": 0.57231,
+    "seconds": 0.5723,
+    "rms": 0.12037,
+    "peak": 0.79,
+    "sha256": "292b87ea53f95768a9ada935c268ef4b0fe3a1f451ddc98896c2ece64bc0808e"
+  },
+  {
+    "asset": "steps/footstep_concrete_000.wav",
+    "source": "impact/Audio/footstep_concrete_000.ogg",
+    "start": 0,
+    "end": 0.10592,
+    "seconds": 0.1059,
+    "rms": 0.05239,
+    "peak": 0.4855,
+    "sha256": "7e677f3afcb53c7aa2adcef82ee2de95362c698b7b489e43f961fe2be6721107"
+  },
+  {
+    "asset": "steps/footstep_concrete_001.wav",
+    "source": "impact/Audio/footstep_concrete_001.ogg",
+    "start": 0,
+    "end": 0.10764,
+    "seconds": 0.1076,
+    "rms": 0.04291,
+    "peak": 0.4285,
+    "sha256": "d997200d6b776ee9e6ba198671d210cc796c88bedc6906ca783e7b5c1ad9c497"
+  },
+  {
+    "asset": "steps/footstep_concrete_002.wav",
+    "source": "impact/Audio/footstep_concrete_002.ogg",
+    "start": 0,
+    "end": 0.11279,
+    "seconds": 0.1128,
+    "rms": 0.0393,
+    "peak": 0.446,
+    "sha256": "84e777a84a2c4d0ff27314fef5d83f80f8f0843ce6d108f87b195de61efcb205"
+  },
+  {
+    "asset": "steps/footstep_concrete_003.wav",
+    "source": "impact/Audio/footstep_concrete_003.ogg",
+    "start": 0,
+    "end": 0.1105,
+    "seconds": 0.1105,
+    "rms": 0.04594,
+    "peak": 0.4484,
+    "sha256": "0fee203f1e4c7977fe858d489d9ef9e094e3aefbc705b88686fb564bad3abb70"
+  },
+  {
+    "asset": "steps/footstep_concrete_004.wav",
+    "source": "impact/Audio/footstep_concrete_004.ogg",
+    "start": 0,
+    "end": 0.11435,
+    "seconds": 0.1144,
+    "rms": 0.05033,
+    "peak": 0.4835,
+    "sha256": "bc6031b0688bff516a13bee7c6feb962c90b1b7cafd88c96d9a2b60d2905c65e"
+  },
+  {
+    "asset": "bell/impactBell_heavy_000.wav",
+    "source": "impact/Audio/impactBell_heavy_000.ogg",
+    "start": 0,
+    "end": 1.48018,
+    "seconds": 1.4802,
+    "rms": 0.04088,
+    "peak": 0.5326,
+    "sha256": "70656dd17e4589b57e30c41387a59083a10c0b4bd1cd742229fd6dfee0a69570"
+  },
+  {
+    "asset": "break/impactWood_heavy_000.wav",
+    "source": "impact/Audio/impactWood_heavy_000.ogg",
+    "start": 0,
+    "end": 0.31304,
+    "seconds": 0.313,
+    "rms": 0.08826,
+    "peak": 0.79,
+    "sha256": "50b977613de31df0fb27e8a1de200286c62baa66680c49377148355c2a26bfb6"
+  },
+  {
+    "asset": "break/impactWood_heavy_001.wav",
+    "source": "impact/Audio/impactWood_heavy_001.ogg",
+    "start": 0,
+    "end": 0.31304,
+    "seconds": 0.313,
+    "rms": 0.087,
+    "peak": 0.79,
+    "sha256": "28c2a7ce4c6acfbb3b84bc9e4a636d10951e4760e0da2f7d0e2e56269196639e"
+  },
+  {
+    "asset": "break/impactWood_heavy_002.wav",
+    "source": "impact/Audio/impactWood_heavy_002.ogg",
+    "start": 0,
+    "end": 0.31304,
+    "seconds": 0.313,
+    "rms": 0.09682,
+    "peak": 0.79,
+    "sha256": "b885431a4d951e487bdf998474ae745f211e07996f5f196faf6bbf1f584051f5"
+  },
+  {
+    "asset": "break/impactPlank_medium_000.wav",
+    "source": "impact/Audio/impactPlank_medium_000.ogg",
+    "start": 0,
+    "end": 0.779,
+    "seconds": 0.779,
+    "rms": 0.05633,
+    "peak": 0.79,
+    "sha256": "7762fd12e4cc0e4975209b6dca9494e83e0a1264972514d586e541936e7ce540"
+  },
+  {
+    "asset": "break/impactPlank_medium_001.wav",
+    "source": "impact/Audio/impactPlank_medium_001.ogg",
+    "start": 0,
+    "end": 0.779,
+    "seconds": 0.779,
+    "rms": 0.08195,
+    "peak": 0.79,
+    "sha256": "d6b858976c1956c5b815d57cf967eb427a6eafaed48549c7eb3bb54ac882e6e1"
+  },
+  {
+    "asset": "swish/swish_3.wav",
+    "source": "swishes/swishes/swish-3.wav",
+    "start": 0,
+    "end": 0.14585,
+    "seconds": 0.1459,
+    "rms": 0.22847,
+    "peak": 0.79,
+    "sha256": "c8d7d482165c7073fec3d6e1c0d0f9721b070fd5a382931ba2315074bd05bf2c"
+  },
+  {
+    "asset": "swish/swish_5.wav",
+    "source": "swishes/swishes/swish-5.wav",
+    "start": 0,
+    "end": 0.12707,
+    "seconds": 0.1271,
+    "rms": 0.16187,
+    "peak": 0.79,
+    "sha256": "9f16991d4fb9b0a628f6a9b32ee93d5aab9ea523cc9f430aeafb06a46c167430"
+  },
+  {
+    "asset": "swish/swish_7.wav",
+    "source": "swishes/swishes/swish-7.wav",
+    "start": 0,
+    "end": 0.18748,
+    "seconds": 0.1875,
+    "rms": 0.1762,
+    "peak": 0.79,
+    "sha256": "cec1d9e2e2ef7e7590139a549f4f361ecb1692715261866389500ea2c76c788d"
+  },
+  {
+    "asset": "blade_swing/katana_swing_1.wav",
+    "source": "blade/Katana Swing.wav",
+    "start": 0.31,
+    "end": 0.65,
+    "seconds": 0.34,
+    "rms": 0.17545,
+    "peak": 0.79,
+    "sha256": "58f809d6238ae2c209c4428baa59be4333df9ad33ee80d1b30ffdf990381ad73"
+  },
+  {
+    "asset": "blade_swing/katana_swing_2.wav",
+    "source": "blade/Katana Swing.wav",
+    "start": 1.27,
+    "end": 1.64,
+    "seconds": 0.37,
+    "rms": 0.16556,
+    "peak": 0.79,
+    "sha256": "9a0534ddd39f05e41179817e8c4d85fd759314583575d4c28f7dae62bcbb1066"
+  },
+  {
+    "asset": "blade_swing/katana_swing_3.wav",
+    "source": "blade/Katana Swing.wav",
+    "start": 2.24,
+    "end": 2.64,
+    "seconds": 0.4,
+    "rms": 0.14197,
+    "peak": 0.79,
+    "sha256": "19ff32d0a8dbc760c1bcc4b26040f4c18b2bcaeb8aa71a7be9a7ecfd80a7b885"
+  },
+  {
+    "asset": "blade_draw/katana_draw_1.wav",
+    "source": "blade2/Katana Draw Fast.wav",
+    "start": 0.185,
+    "end": 0.64,
+    "seconds": 0.455,
+    "rms": 0.03156,
+    "peak": 0.79,
+    "sha256": "8be73123af3131db92eacc3ef745e3a0b2be1db43a133dcaa5ed4eb135762918"
+  },
+  {
+    "asset": "blade_draw/katana_draw_2.wav",
+    "source": "blade2/Katana Draw Fast.wav",
+    "start": 1.21,
+    "end": 1.69,
+    "seconds": 0.48,
+    "rms": 0.03895,
+    "peak": 0.79,
+    "sha256": "7355d812017f809cd045447a21ec3b5588549df5fe29cbee51c690f225feeb41"
+  },
+  {
+    "asset": "blade_draw/katana_draw_3.wav",
+    "source": "blade2/Katana Draw Fast.wav",
+    "start": 2.24,
+    "end": 2.71,
+    "seconds": 0.47,
+    "rms": 0.0912,
+    "peak": 0.79,
+    "sha256": "d8f50484d0c72ec19687b82ae6f436d1a4d23f50324a04ce0a8e6562f5f90f7e"
+  }
+]

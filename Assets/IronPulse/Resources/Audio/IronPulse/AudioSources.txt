@@ -1,0 +1,64 @@
+IRON PULSE - RECORDED SOUND LIBRARY
+Imported 16 October 2026. No background music is included.
+
+All included sound recordings are CC0 1.0 Universal / public domain dedication.
+https://creativecommons.org/publicdomain/zero/1.0/
+The following credits are preserved voluntarily, with source pages and exact source-file edits
+in SampleEdits.json. Runtime audio is loaded from these recordings, never synthesized.
+
+1. THE FREE FIREARM SOUND LIBRARY
+Recorded by Ben Jaszczak, Brian Nelson, Kevin Heras, and Matthew Nanney.
+Source: https://opengameart.org/content/the-free-firearm-sound-library
+Archive: https://opengameart.org/sites/default/files/Prepared%20SFX%20Library.7z
+License: CC0. Source page includes the creators' CC0 statement.
+Used: near-distance 1911 / Walther PPQ pistol, AR-15 / AK-47 rifle,
+Mossberg Model 190 / Winchester Model 12 shotgun recordings.
+Edits: separated individual gunshots from stereo takes, mono downmix, trimmed room tails,
+anti-aliased resampling to 48 kHz, gentle transient compression and peak normalization.
+
+2. SHOTGUN RELOAD SOUND EFFECTS
+Created by zer0_sol.
+Source: https://opengameart.org/content/shotgun-reload-sound-effects
+Archive: https://opengameart.org/sites/default/files/shotgunsounds.zip
+License: CC0.
+Used: Rack.mp3, Shell in Chamber.mp3, First Shell.mp3, Subsequent Shells.mp3.
+Edits: short mechanical unlock/lock and single-shell insert slices; 48 kHz mono,
+normalization and fades. Pump-action mechanisms serve as short mechanical foley
+layers for the break-action shotgun, rather than playing the entire pump reload.
+
+3. IMPACT SOUNDS 1.0
+Created by Kenney (https://kenney.nl).
+Source: https://kenney.nl/assets/impact-sounds
+Archive: https://kenney.nl/media/pages/assets/impact-sounds/87b4ddecda-1677589768/kenney_impact-sounds.zip
+License: Creative Commons CC0, confirmed on source page and included License.txt.
+Used: concrete footsteps; metal/plate/soft/punch/wood/plank impacts; one bell hit.
+Edits: decoded to 48 kHz mono PCM, normalization and fades.
+Several recordings are layered and modestly pitched at runtime for cyborg impacts,
+grabs, armor failure and limb separation. They remain short event sounds.
+
+4. SWISHES SOUND PACK
+Created and physically recorded by artisticdude.
+Source: https://opengameart.org/content/swishes-sound-pack
+Archive: https://opengameart.org/sites/default/files/swishes.zip
+License: CC0. Creator describes recording clothes-hanger and wood swings.
+Used: swish-3.wav, swish-5.wav, swish-7.wav.
+Edits: 48 kHz mono, normalization and fades. Used for punch/dash air movement.
+
+5. MEDIEVAL SOUND EFFECTS - WEAPON TEXTURES
+Recorded by Ben Jaszczak and Brian Nelson / Still North Media.
+Source: https://opengameart.org/content/medieval-sound-effects-weapon-textures
+Archives:
+https://opengameart.org/sites/default/files/medieval_sfx_textures_1_of_2.7z
+https://opengameart.org/sites/default/files/medieval_sfx_textures_2_of_2.7z
+License: CC0, confirmed on source page and creators' statement.
+Used: Katana Swing.wav, Katana Draw Fast.wav.
+Edits: selected separate physical sword swings/draws from long takes, anti-aliased
+resampling from 192 kHz to 48 kHz mono, normalization and fades.
+
+UNITY LIBRARY SEARCH
+Checked the Unity Asset Store's Free Weapon Sound Effects by SoundLab_1:
+https://assetstore.unity.com/packages/audio/sound-fx/weapons/free-weapon-sound-effects-388474
+It is a free asset under the Standard Unity Asset Store EULA, but the public page
+does not provide an anonymous archive download. No Unity Asset Store package was
+acquired or redistributed. The directly downloadable CC0 field-recording sources
+above were selected to keep the project self-contained without account actions.
