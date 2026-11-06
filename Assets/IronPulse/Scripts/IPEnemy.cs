@@ -32,14 +32,14 @@ namespace IronPulse
         float health, maxHealth, staggerTime, staggerProtection, spawnGrace, cooldown, windup, windupDuration, animationTime, yVelocity, hitFlash;
         float modelScale, attackRange, speed, strafeSign, strideBlend, gaitPhase, attackAge = -1f, hitFlinch;
         Vector3 lastDirection, lastHitDirection, lastHitPoint, attackAim;
-        Vector3 hitVelocity, executionVisualStart, movementLean;
+        Vector3 hitVelocity, executionVisualStart, executionTorsoPositionStart, movementLean;
         Quaternion executionFacingStart, executionFacingTarget, executionVisualRotationStart;
         Quaternion executionHeadStart, executionTorsoStart, executionLeftStart, executionRightStart, executionLeftLegStart, executionRightLegStart, executionLeftElbowStart, executionRightElbowStart;
         Quaternion executionLeftKneeStart, executionRightKneeStart;
         Material eyeMat, shellMat;
         IPExecutionStyle executionStyle;
         Vector3 executionCutDirection;
-        bool executionFirstCut, executionSecondCut, executionFinalized, executionPunchSound;
+        bool executionFirstCut, executionSecondCut, executionFinalized, executionPunchSound, executionOppositeArmBreak;
         float stagedExecutionProgress;
         static Material cutFaceMaterial, hydraulicMaterial, sparkMaterial;
         Color eyeColor;
@@ -611,9 +611,10 @@ namespace IronPulse
             executionLocked = true;
             executionStyle = style;
             executionFirstCut = false;
-            executionSecondCut = executionFinalized = executionPunchSound = false;
+            executionSecondCut = executionFinalized = executionPunchSound = executionOppositeArmBreak = false;
             stagedExecutionProgress = 0;
             executionVisualStart = visual.localPosition;
+            executionTorsoPositionStart = torso.localPosition;
             executionVisualRotationStart = visual.localRotation;
             ConfigureExecutionFacing(attackerPosition);
             executionHeadStart = head.localRotation; executionTorsoStart = torso.localRotation;
@@ -640,6 +641,7 @@ namespace IronPulse
         {
             if (IsDead || !executionLocked) return;
             executionLocked = false; staggerTime = Mathf.Max(staggerTime, 1.5f);
+            torso.localPosition = executionTorsoPositionStart;
             SetOutline(true);
         }
 
@@ -651,8 +653,26 @@ namespace IronPulse
             if (progress >= .31f && !executionPunchSound)
             {
                 executionPunchSound = true;
-                CutSpray(ExecutionChestPoint, -transform.forward + Vector3.up * .2f, 2, 4);
-                IPGame.Audio("punchImpact", ExecutionChestPoint, .88f);
+                if (executionStyle == IPExecutionStyle.BackstepCrush)
+                    IPGame.Audio("execute_grab", ExecutionHeadPoint, .7f);
+                else
+                {
+                    CutSpray(ExecutionChestPoint, -transform.forward + Vector3.up * .2f, 2, 4);
+                    IPGame.Audio("punchImpact", ExecutionChestPoint, .88f);
+                }
+            }
+            if (executionStyle == IPExecutionStyle.TwinArmBreak)
+            {
+                if (progress >= .32f && !executionFirstCut)
+                {
+                    executionFirstCut = true;
+                    BreakExecutionArm(leftArm, transform.right, "Twin arm break / first shoulder");
+                }
+                if (progress >= .42f && !executionOppositeArmBreak)
+                {
+                    executionOppositeArmBreak = true;
+                    BreakExecutionArm(rightArm, -transform.right, "Twin arm break / guard-assisted shoulder");
+                }
             }
             if (executionStyle == IPExecutionStyle.Frontal && progress > .355f && !executionFirstCut)
             {
@@ -733,6 +753,60 @@ namespace IronPulse
                 r = new Vector3(-52f * grab + collapse * 33f - blade * 22f, -20f * tension + struggle * 8f, -39f * tension - punch * 12f);
             }
             if (executionStyle == IPExecutionStyle.RisingCut) { h.x -= blade * 28f; b.x -= blade * 18f; b.y += blade * 16f; }
+            if (executionStyle == IPExecutionStyle.BackstepCrush)
+            {
+                // The blade removes the supports first. Weight transfers onto the knees,
+                // then the free hand drives the neck and shoulder line down into the floor.
+                float brace = Ease((t - .16f) / .22f);
+                float sweep = ImpactEnvelope(t, .48f, .535f, .64f);
+                float kneel = Ease((t - .505f) / .145f);
+                float slam = Ease((t - .63f) / .105f);
+                float recoil = ImpactEnvelope(t, .31f, .355f, .46f);
+                visual.localPosition = Vector3.Lerp(executionVisualStart,
+                    new Vector3(struggle * .012f, -.035f * brace - .20f * kneel - .07f * slam,
+                        .075f * brace - .04f * recoil + .08f * kneel + .06f * slam), entry);
+                visual.localRotation = Quaternion.Slerp(executionVisualRotationStart,
+                    Quaternion.Euler(-recoil * 4f + slam * 8f, struggle * 3f, -sweep * 5f), entry);
+                torso.localPosition = executionTorsoPositionStart + new Vector3(0, -.18f * kneel - .54f * slam, .10f * kneel + .16f * slam);
+                b = new Vector3(12f * brace + 20f * kneel + 65f * slam, struggle * 5f - sweep * 8f, sweep * 6f);
+                h = new Vector3(-13f * brace + 8f * kneel + 15f * slam, -9f * brace + struggle * 5f, sweep * -10f);
+                l = new Vector3(-55f * brace + 22f * kneel + 24f * slam, 14f * brace, 24f * brace + 19f * sweep);
+                r = new Vector3(-29f * brace + 20f * kneel + 31f * slam, -9f * brace, -28f * brace - 24f * sweep);
+                leftLeg.localRotation = Quaternion.Slerp(executionLeftLegStart, Quaternion.Euler(-11f * brace - 35f * kneel, 0, -11f * sweep), entry);
+                rightLeg.localRotation = Quaternion.Slerp(executionRightLegStart, Quaternion.Euler(8f * brace - 28f * kneel, 0, 13f * sweep), entry);
+                leftKnee.localRotation = Quaternion.Slerp(executionLeftKneeStart, Quaternion.Euler(15f * brace + 77f * kneel, 0, 0), entry);
+                rightKnee.localRotation = Quaternion.Slerp(executionRightKneeStart, Quaternion.Euler(11f * brace + 83f * kneel, 0, 0), entry);
+            }
+            else if (executionStyle == IPExecutionStyle.TwinArmBreak)
+            {
+                // Opposing shoulder loads make the two locks readable before each joint
+                // releases. The spine follows each wrench rather than rotating in place.
+                float lockLeft = Ease((t - .12f) / .15f);
+                float breakLeft = ImpactEnvelope(t, .305f, .33f, .39f);
+                float lockRight = Ease((t - .335f) / .065f);
+                float breakRight = ImpactEnvelope(t, .405f, .432f, .49f);
+                float neckPin = Ease((t - .455f) / .07f);
+                float neckCut = ImpactEnvelope(t, .51f, .545f, .635f);
+                float drop = Ease((t - .55f) / .185f);
+                visual.localPosition = Vector3.Lerp(executionVisualStart,
+                    new Vector3(-.035f * breakLeft + .04f * breakRight, -.055f * lockLeft - .22f * drop,
+                        .09f * lockLeft - .04f * breakLeft + .055f * lockRight - .055f * neckCut), entry);
+                visual.localRotation = Quaternion.Slerp(executionVisualRotationStart,
+                    Quaternion.Euler(neckCut * -6f + drop * 12f, -breakLeft * 8f + breakRight * 11f, breakLeft * 7f - breakRight * 9f), entry);
+                b = new Vector3(7f * lockLeft - 16f * neckCut + 19f * drop,
+                    20f * lockLeft - 36f * lockRight + 14f * neckPin - 12f * breakLeft + 13f * breakRight,
+                    -11f * lockLeft + 19f * lockRight + 14f * breakLeft - 18f * breakRight);
+                h = new Vector3(-11f * lockLeft - 31f * neckPin - 21f * neckCut + drop * 17f,
+                    -18f * lockLeft + 25f * lockRight - 23f * neckPin + 17f * neckCut,
+                    9f * lockLeft - 13f * lockRight + 22f * neckCut);
+                l = new Vector3(-73f * lockLeft + 49f * breakLeft + drop * 35f, 17f * lockLeft, 72f * lockLeft + 18f * breakLeft);
+                r = new Vector3(-23f * lockLeft - 58f * lockRight + 51f * breakRight + drop * 32f,
+                    -19f * lockRight, -19f * lockLeft - 66f * lockRight - 21f * breakRight);
+                leftLeg.localRotation = Quaternion.Slerp(executionLeftLegStart, Quaternion.Euler(-8f * lockLeft - 21f * drop, 0, -6f * drop), entry);
+                rightLeg.localRotation = Quaternion.Slerp(executionRightLegStart, Quaternion.Euler(7f * lockLeft + 18f * drop, 0, 7f * drop), entry);
+                leftKnee.localRotation = Quaternion.Slerp(executionLeftKneeStart, Quaternion.Euler(13f * lockLeft + 39f * drop, 0, 0), entry);
+                rightKnee.localRotation = Quaternion.Slerp(executionRightKneeStart, Quaternion.Euler(9f * lockLeft + 34f * drop, 0, 0), entry);
+            }
             head.localRotation = Quaternion.Slerp(executionHeadStart, Quaternion.Euler(h), entry);
             torso.localRotation = Quaternion.Slerp(executionTorsoStart, Quaternion.Euler(b), entry);
             leftArm.localRotation = Quaternion.Slerp(executionLeftStart, Quaternion.Euler(l), entry);
@@ -773,6 +847,13 @@ namespace IronPulse
                 SeverLimb(head, Vector3.up * 6f + executionCutDirection * 2f, true);
             }
             else if (style == IPExecutionStyle.RearCut) at = head.position - Vector3.up * .13f;
+            else if (style == IPExecutionStyle.BackstepCrush)
+            {
+                at = (leftKnee.position + rightKnee.position) * .5f;
+                SeverLimb(leftKnee, -transform.right * 2.3f + transform.forward * .8f + Vector3.up * .65f, false, "Backstep / swept left lower leg");
+                SeverLimb(rightKnee, transform.right * 2.3f + transform.forward * 1.1f + Vector3.up * .5f, false, "Backstep / swept right lower leg");
+            }
+            else if (style == IPExecutionStyle.TwinArmBreak) at = head.position - Vector3.up * .13f * modelScale;
             else if (style == IPExecutionStyle.DashThrust)
                 DetachGroup("Katana / punctured chest armor", at, executionCutDirection * .8f + Vector3.up, new Vector3(60, 90, 40),
                     source => source.name == "Chest vent" || source.name == "Exposed power core");
@@ -785,10 +866,10 @@ namespace IronPulse
             Destroy(gameObject, 1.15f); // Cleanup also covers an interrupted/reset finisher.
         }
 
-        void SeverLimb(Transform joint, Vector3 launch, bool neck)
+        void SeverLimb(Transform joint, Vector3 launch, bool neck, string label = null)
         {
             if (joint == null) return;
-            int count = DetachGroup(neck ? "Severed head and torn neck cables" : "Detached articulated limb and exposed socket",
+            int count = DetachGroup(label ?? (neck ? "Severed head and torn neck cables" : "Detached articulated limb and exposed socket"),
                 joint.position, launch, new Vector3(110, 80, neck ? 160 : -135), source => source.transform.IsChildOf(joint));
             if (count == 0) return;
             EnsureCutMaterials();
@@ -801,13 +882,49 @@ namespace IronPulse
             }
         }
 
+        void BreakExecutionArm(Transform shoulder, Vector3 outward, string label)
+        {
+            Vector3 at = shoulder.position;
+            SeverLimb(shoulder, outward * 2.6f + transform.forward * 1.8f + Vector3.down * .75f, false, label);
+            CutFlash(at, outward, modelScale * .5f);
+            CutSpray(at, outward + transform.forward * .3f, 9, 9);
+            IPGame.Audio("metalTear", at, .92f);
+        }
+
         void FinalizeExecutionBody()
         {
             if (executionFinalized) return;
             executionFinalized = true;
             Vector3 centre = transform.position + Vector3.up * 1.12f * modelScale;
             Vector3 cut = executionCutDirection.sqrMagnitude > .01f ? executionCutDirection : transform.right;
-            if (executionStyle == IPExecutionStyle.RearCut)
+            if (executionStyle == IPExecutionStyle.BackstepCrush)
+            {
+                // Two capped head sections, not a random cube explosion: the palm-driven
+                // impact splits the casing while the disarmed frame folds onto the floor.
+                Vector3 impact = head.position;
+                Plane fracture = new Plane((transform.right + Vector3.up * .22f).normalized, impact);
+                DetachGroup("Backstep / crushed left cranial casing", impact,
+                    -transform.right * 1.7f + transform.forward * .7f + Vector3.up * .6f,
+                    new Vector3(86, 91, 140), source => source.transform.IsChildOf(head), fracture, true, false);
+                DetachGroup("Backstep / crushed right cranial casing", impact,
+                    transform.right * 1.8f + transform.forward * .8f + Vector3.up * .8f,
+                    new Vector3(-70, -85, -115), source => source.transform.IsChildOf(head), fracture, false, false);
+                foreach (Renderer source in originals) if (source != null && source.transform.IsChildOf(head)) source.enabled = false;
+                DetachGroup("Backstep / kneeling broken frame", torso.position,
+                    transform.forward * .7f + Vector3.down * .4f, new Vector3(37, 8, -12), source => true);
+                CutSpray(impact, Vector3.up + transform.forward * .3f, 16, 12);
+                CutFlash(impact, transform.right, modelScale * .72f);
+            }
+            else if (executionStyle == IPExecutionStyle.TwinArmBreak)
+            {
+                Vector3 neck = head.position - Vector3.up * .13f * modelScale;
+                SeverLimb(head, transform.forward * 1.8f - transform.right * 1.25f + Vector3.up * 1.5f, true);
+                DetachGroup("Twin arm break / disarmed decapitated frame", torso.position,
+                    -transform.forward * 1.2f + Vector3.up * .4f, new Vector3(-63, -16, 21), source => true);
+                CutSpray(neck, transform.forward + Vector3.up * .35f, 14, 9);
+                CutFlash(neck, cut, modelScale * .55f);
+            }
+            else if (executionStyle == IPExecutionStyle.RearCut)
             {
                 SeverLimb(head, transform.forward * 2.7f + cut * 1.6f + Vector3.up * 2.3f, true);
                 DetachGroup("Katana / collapsed decapitated body", centre, transform.forward * 1.6f + Vector3.up * .45f,

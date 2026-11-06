@@ -49,13 +49,14 @@ namespace IronPulse
             player.ResetAt(IPWorld.PlayerSpawn);yield return new WaitForSeconds(.45f);start=player.transform.position;
             Keys(Key.D,Key.LeftShift);yield return new WaitForSeconds(.14f);float dashDistance=Vector3.Distance(start,player.transform.position);float dashCooldown=player.DashCooldown01;Keys();yield return new WaitForSeconds(.15f);
             Record("Directional dash",dashDistance>2.1f&&dashCooldown>0,"distance="+dashDistance.ToString("F2")+", cooldown="+dashCooldown.ToString("F2"));
+            yield return CheckDoubleDash();
             player.ResetAt(IPWorld.PlayerSpawn);yield return new WaitForSeconds(.5f);float floor=player.transform.position.y;
             Keys(Key.Space);yield return new WaitForSeconds(.12f);Keys();yield return new WaitForSeconds(.12f);int firstJumps=player.JumpsRemaining;
             Keys(Key.Space);yield return new WaitForSeconds(.12f);Keys();yield return new WaitForSeconds(.15f);
             Record("Double jump",firstJumps==1&&player.JumpsRemaining==0&&player.transform.position.y>floor+2,"remaining="+player.JumpsRemaining+", rise="+(player.transform.position.y-floor).ToString("F2"));
             player.ResetAt(IPWorld.PlayerSpawn);yield return new WaitForSeconds(.5f);
             int ammo=player.Shells;InputSystem.QueueStateEvent(mouse,new MouseState{buttons=1});yield return null;yield return new WaitForEndOfFrame();
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-firing.png"));
+            ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-firing.png"));
             yield return new WaitForSeconds(.1f);InputSystem.QueueStateEvent(mouse,new MouseState());yield return new WaitForSeconds(.2f);
             Record("Shotgun fires",ammo==2&&player.Shells==1,"loaded shells="+player.Shells);
             Keys(Key.R);yield return null;Keys();
@@ -69,7 +70,7 @@ namespace IronPulse
                 if(rounds!=null&&rounds.Length==2&&rounds[0].gameObject.activeInHierarchy)
                 {
                     sawFreshShells=true;Vector3 local=rounds[0].localPosition;if(trackedShell)shellTravel+=Vector3.Distance(lastShell,local);lastShell=local;trackedShell=true;
-                    if(!reloadPhoto&&player.Weapon.ReloadProgress>.52f){reloadPhoto=true;yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-reload.png"));}
+                    if(!reloadPhoto&&player.Weapon.ReloadProgress>.52f){reloadPhoto=true;yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-reload.png"));}
                 }
             }
             Record("Fast break action reload",reloadBegan&&player.Shells==2&&Time.time-reloadStart<1.14f,"seconds="+(Time.time-reloadStart).ToString("F2")+", shells="+player.Shells);
@@ -87,7 +88,7 @@ namespace IronPulse
                 if(wasExecuting&&!player.IsExecuting)exitRotationStep=Quaternion.Angle(lastEyeRotation,player.ViewCamera.transform.rotation);
                 wasExecuting=player.IsExecuting;lastEyeRotation=player.ViewCamera.transform.rotation;
                 if(fixture){victimMotion=Mathf.Max(victimMotion,Vector3.Distance(initialHead,fixture.ExecutionHeadPoint));if(fixture.ExecutionFacingProgress>.95f&&Vector3.Dot(fixture.transform.forward,Vector3.ProjectOnPlane(player.transform.position-fixture.transform.position,Vector3.up).normalized)>.8f)turnedVictim=true;}
-                if(executionPhoto<6&&Time.time-executionStart>=.13f+executionPhoto*.18f){yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-execution-"+(++executionPhoto).ToString("00")+".png"));}
+                if(executionPhoto<6&&Time.time-executionStart>=.13f+executionPhoto*.18f){yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-execution-"+(++executionPhoto).ToString("00")+".png"));}
             }
             Record("Glory kill + health",began&&!player.IsExecuting&&game.Executions==executions+1&&player.Health>=before+34,"health="+before+" -> "+player.Health+", executions="+game.Executions);
             Record("Smooth execution camera exit",exitRotationStep<4f,"exit rotation step="+exitRotationStep.ToString("F2")+" degrees");
@@ -107,14 +108,14 @@ namespace IronPulse
             Record("Pistol slot",player.Weapon.CurrentWeapon==IPWeaponKind.Pistol&&player.Weapon.Capacity==12,"kind="+player.Weapon.CurrentWeapon+", capacity="+player.Weapon.Capacity);
             int pistolShots=game.ShotsFired;InputSystem.QueueStateEvent(mouse,new MouseState{buttons=1});yield return new WaitForSeconds(.48f);InputSystem.QueueStateEvent(mouse,new MouseState());yield return new WaitForSeconds(.12f);
             Record("Pistol semiautomatic",game.ShotsFired-pistolShots==1,"held trigger fired "+(game.ShotsFired-pistolShots)+" round(s)");
-            yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-pistol.png"));
+            yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-pistol.png"));
             Keys(Key.R);yield return new WaitForSeconds(.12f);Keys();
             Record("Pistol unlimited, reload removed",player.Shells==12&&!player.Weapon.UsesReload&&!player.Weapon.IsReloading,"loaded="+player.Shells+", reload="+player.Weapon.IsReloading);
             Keys(Key.Digit2);yield return new WaitForSeconds(.45f);Keys();yield return null;
             Record("Rifle slot",player.Weapon.CurrentWeapon==IPWeaponKind.Rifle&&player.Weapon.Capacity==30,"kind="+player.Weapon.CurrentWeapon+", capacity="+player.Weapon.Capacity);
             int rifleShots=game.ShotsFired;InputSystem.QueueStateEvent(mouse,new MouseState{buttons=1});yield return new WaitForSeconds(3.4f);InputSystem.QueueStateEvent(mouse,new MouseState());yield return new WaitForSeconds(.15f);
             Record("Rifle sustained unlimited automatic fire",game.ShotsFired-rifleShots>=32&&player.Shells==30,"burst fired "+(game.ShotsFired-rifleShots)+" rounds, reserve="+player.Shells);
-            yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-rifle.png"));
+            yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-rifle.png"));
             Keys(Key.Digit3);yield return new WaitForSeconds(.45f);Keys();yield return null;
             Record("Shotgun slot",player.Weapon.CurrentWeapon==IPWeaponKind.Shotgun&&player.Weapon.Capacity==2,"kind="+player.Weapon.CurrentWeapon);
             Keys(Key.Digit2);yield return new WaitForSeconds(.4f);Keys();yield return null;
@@ -122,7 +123,7 @@ namespace IronPulse
             Keys(Key.R);yield return new WaitForSeconds(.12f);Keys();
             Record("Rifle reload removed",!player.Weapon.IsReloading,"reload="+player.Weapon.IsReloading);
             Keys(Key.Digit3);yield return new WaitForSeconds(.4f);Keys();yield return null;
-            yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-shotgun.png"));
+            yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-shotgun.png"));
             player.transform.rotation=Quaternion.identity;player.ResetAt(IPWorld.PlayerSpawn);yield return new WaitForSeconds(.4f);
             var dashTarget=Fixture(IPEnemyKind.Melee,player.transform.position+Vector3.forward*3.7f);
             player.TakeDamage(50,player.transform.position-Vector3.forward);float dashBefore=player.Health;
@@ -135,7 +136,7 @@ namespace IronPulse
             player.TakeDamage(50,player.transform.position-Vector3.forward);float aerialBefore=player.Health;
             InputSystem.QueueStateEvent(mouse,new MouseState{delta=new Vector2(0,-520)});yield return new WaitForSeconds(.24f);
             Keys(Key.E);yield return new WaitForSeconds(.05f);Keys();bool aerialBegan=player.IsExecuting;
-            yield return new WaitForSeconds(.43f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-katana.png"));
+            yield return new WaitForSeconds(.43f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-katana.png"));
             yield return new WaitForSeconds(1.35f);
             Record("E while falling from above",aerialBegan&&player.LastExecutionStyle==IPExecutionStyle.AerialPlunge&&player.Health>=aerialBefore+34,"style="+player.LastExecutionStyle+", health="+player.Health);
             if(aerialTarget&&!aerialTarget.IsDead)Destroy(aerialTarget.gameObject);
@@ -160,34 +161,78 @@ namespace IronPulse
                 display.Initialize((IPEnemyKind)i,player.transform.position+new Vector3((i-1)*2.3f,0,4.3f+Mathf.Abs(i-1)*1.7f),player);
                 display.transform.rotation=Quaternion.LookRotation(Vector3.back);display.enabled=false;
             }
-            yield return new WaitForSeconds(2.6f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-enemies.png"));
+            yield return new WaitForSeconds(2.6f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-enemies.png"));
             Record("No runtime errors during live checks",runtimeErrors==0,runtimeErrors==0?"No errors, exceptions or assertions":runtimeErrors+" errors: "+firstRuntimeError);
             Application.logMessageReceived-=TrackRuntimeErrors;
             RestoreDevices();
             var report=new Report{unity=Application.unityVersion,allPassed=checks.TrueForAll(e=>e.passed),averageFrameMilliseconds=frameSamples>0?frameSeconds/frameSamples*1000:0,sampledFrames=frameSamples,checks=checks.ToArray()};
-            Directory.CreateDirectory(output);File.WriteAllText(Path.Combine(output,"iron-pulse-v4-validation.json"),JsonUtility.ToJson(report,true));
+            Directory.CreateDirectory(output);File.WriteAllText(Path.Combine(output,"iron-pulse-v5-validation.json"),JsonUtility.ToJson(report,true));
             game.ReturnToTitle();yield return null;yield return new WaitForEndOfFrame();
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-title.png"));
+            ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-title.png"));
             Debug.Log("IRON PULSE validation complete: "+report.allPassed+". Report: "+output);
             Destroy(this);
         }
         IEnumerator CheckExtraFinishers()
         {
-            foreach(var expected in new[]{IPExecutionStyle.Frontal,IPExecutionStyle.StrafeLeft,IPExecutionStyle.StrafeRight,IPExecutionStyle.RisingCut,IPExecutionStyle.RearCut})
+            foreach(var expected in new[]{IPExecutionStyle.Frontal,IPExecutionStyle.StrafeLeft,IPExecutionStyle.StrafeRight,IPExecutionStyle.RisingCut,IPExecutionStyle.RearCut,IPExecutionStyle.BackstepCrush,IPExecutionStyle.TwinArmBreak})
             {
                 Keys();player.transform.rotation=Quaternion.identity;player.ResetAt(IPWorld.PlayerSpawn);yield return new WaitForSeconds(.4f);
-                var target=Fixture(IPEnemyKind.Melee,player.transform.position+Vector3.forward*3f);
+                var target=Fixture(IPEnemyKind.Melee,player.transform.position+Vector3.forward*(expected==IPExecutionStyle.TwinArmBreak?1.5f:3f));
                 if(expected==IPExecutionStyle.RearCut)target.transform.rotation=Quaternion.identity;
                 player.TakeDamage(50,player.transform.position-Vector3.forward);int beforeCount=game.Executions;
                 if(expected==IPExecutionStyle.StrafeLeft){Keys(Key.A);yield return new WaitForSeconds(.12f);}
                 if(expected==IPExecutionStyle.StrafeRight){Keys(Key.D);yield return new WaitForSeconds(.12f);}
                 if(expected==IPExecutionStyle.RisingCut){Keys(Key.Space);yield return new WaitForSeconds(.12f);}
+                if(expected==IPExecutionStyle.BackstepCrush){Keys(Key.S);yield return new WaitForSeconds(.12f);}
+                var knownDebris=new HashSet<int>();foreach(var part in FindObjectsByType<IPMechanicalDebris>(FindObjectsSortMode.None))knownDebris.Add(part.GetInstanceID());
                 player.BeginExecution(target);bool began=player.IsExecuting;Keys();
-                bool lethal=false;float beganAt=Time.time;
-                while(Time.time-beganAt<1.6f){yield return null;if(target&&target.IsDead)lethal=true;}
+                bool lethal=false;float beganAt=Time.time;int photos=0;bool novel=expected==IPExecutionStyle.BackstepCrush||expected==IPExecutionStyle.TwinArmBreak;int maxParts=0;bool armsBeforeLethal=false,cappedSections=false;
+                while(Time.time-beganAt<1.7f)
+                {
+                    yield return null;if(target&&target.IsDead)lethal=true;
+                    if(novel)
+                    {
+                        int parts=0;foreach(var part in FindObjectsByType<IPMechanicalDebris>(FindObjectsSortMode.None))if(!knownDebris.Contains(part.GetInstanceID()))
+                        {
+                            parts++;foreach(var filter in part.GetComponentsInChildren<MeshFilter>())if(filter.sharedMesh&&filter.sharedMesh.subMeshCount>1)cappedSections=true;
+                        }
+                        maxParts=Mathf.Max(maxParts,parts);if(parts>=2&&target&&!target.IsDead)armsBeforeLethal=true;
+                    }
+                    if(novel&&photos<3&&Time.time-beganAt>=.28f+photos*.30f){yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-"+expected.ToString().ToLowerInvariant()+"-"+(++photos)+".png"));}
+                }
                 Record("Live finisher / "+expected,began&&lethal&&!player.IsExecuting&&player.LastExecutionStyle==expected&&game.Executions==beforeCount+1&&player.Health>=84f,"style="+player.LastExecutionStyle+", lethal="+lethal+", health="+player.Health+", executions="+(game.Executions-beforeCount));
+                if(expected==IPExecutionStyle.BackstepCrush)Record("Backstep sweep and capped skull fracture",maxParts>=5&&cappedSections,"physical sections="+maxParts+", capped cuts="+cappedSections);
+                if(expected==IPExecutionStyle.TwinArmBreak)Record("Twin arm breaks precede lethal neck cut",armsBeforeLethal&&maxParts>=4,"nonlethal arm breaks="+armsBeforeLethal+", physical sections="+maxParts);
                 if(target)Destroy(target.gameObject);
             }
+        }
+        IEnumerator CheckDoubleDash()
+        {
+            Keys();player.transform.rotation=Quaternion.identity;player.ResetAt(IPWorld.PlayerSpawn);yield return new WaitForSeconds(.4f);
+            Vector3 origin=player.transform.position;
+            Keys(Key.D,Key.LeftShift);yield return new WaitForSeconds(.11f);Keys();yield return new WaitForSeconds(.07f);
+            bool first=player.DashesPerformed==1&&player.DashCharges==1;float east=player.transform.position.x-origin.x;Vector3 turn=player.transform.position;
+            Keys(Key.A,Key.LeftShift);yield return new WaitForSeconds(.11f);Keys();yield return new WaitForSeconds(.02f);
+            float west=turn.x-player.transform.position.x;
+            Record("Two consecutive directional dashes",first&&player.DashesPerformed==2&&player.DashCharges==0&&east>2f&&west>2f,"accepted="+player.DashesPerformed+", charges="+player.DashCharges+", right="+east.ToString("F2")+", left="+west.ToString("F2"));
+            Keys(Key.LeftShift);yield return new WaitForSeconds(.035f);
+            Record("Third dash blocked while empty",player.DashesPerformed==2&&player.DashCharges==0,"accepted="+player.DashesPerformed+", charges="+player.DashCharges);
+            yield return new WaitForSeconds(.50f);
+            Record("Dash charges recharge serially",player.DashCharges==1&&player.DashRechargeProgress01>0f&&player.DashRechargeProgress01<1f,"charges="+player.DashCharges+", progress="+player.DashRechargeProgress01.ToString("F2"));
+            Record("Holding Shift does not repeat dash",player.DashesPerformed==2,"accepted="+player.DashesPerformed);
+            Keys();yield return null;Keys(Key.W,Key.LeftShift);yield return new WaitForSeconds(.10f);Keys();
+            Record("Recharged dash usable immediately",player.DashesPerformed==3&&player.DashCharges==0,"accepted="+player.DashesPerformed+", charges="+player.DashCharges);
+            yield return new WaitForSeconds(1.55f);
+            Record("Both dash charges fully recover",player.DashCharges==2&&Mathf.Approximately(player.DashRechargeProgress01,1f),"charges="+player.DashCharges);
+            player.ResetAt(IPWorld.PlayerSpawn+Vector3.up*3.5f);yield return null;
+            Keys(Key.W,Key.LeftShift);yield return new WaitForSeconds(.08f);Keys();yield return new WaitForSeconds(.04f);
+            Keys(Key.D,Key.LeftShift);yield return new WaitForSeconds(.08f);Keys();
+            Record("Double dash in air preserves jumps",player.DashesPerformed==2&&player.DashCharges==0&&player.JumpsRemaining==2&&player.transform.position.y>2f,"charges="+player.DashCharges+", jumps="+player.JumpsRemaining+", height="+player.transform.position.y.ToString("F2"));
+            player.ResetAt(IPWorld.PlayerSpawn);bool spent=player.TryDash(Vector3.right);game.SetPause(true);bool pausedAttempt=player.TryDash(Vector3.left);
+            yield return new WaitForSecondsRealtime(.82f);
+            Record("Pause freezes dash recharge",spent&&!pausedAttempt&&player.DashCharges==1&&player.DashCooldown01>.8f,"charges="+player.DashCharges+", remaining="+player.DashCooldown01.ToString("F2"));
+            game.SetPause(false);player.ResetAt(IPWorld.PlayerSpawn);
+            Record("Restart restores both dash charges",player.DashCharges==2&&player.DashesPerformed==0,"charges="+player.DashCharges);
         }
         IEnumerator CheckSpecialCombat()
         {
@@ -195,7 +240,7 @@ namespace IronPulse
             var punchTarget=FreshEnemy(IPEnemyKind.Melee,player.transform.position+Vector3.forward*1.7f);float hp=punchTarget.Health;
             int shots=game.ShotsFired;var selected=player.Weapon.CurrentWeapon;
             Keys(Key.F);yield return new WaitForSeconds(.08f);Keys();bool punchBegan=player.IsPunching&&player.Weapon.IsMeleeAttacking;
-            yield return new WaitForSeconds(.13f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-punch.png"));
+            yield return new WaitForSeconds(.13f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-punch.png"));
             InputSystem.QueueStateEvent(mouse,new MouseState{buttons=1});Keys(Key.Digit2,Key.R);yield return new WaitForSeconds(.12f);
             bool weaponBlocked=game.ShotsFired==shots&&!player.Weapon.IsReloading&&player.Weapon.CurrentWeapon==selected;
             InputSystem.QueueStateEvent(mouse,new MouseState());Keys();yield return new WaitForSeconds(.45f);
@@ -218,7 +263,7 @@ namespace IronPulse
             player.TakeDamage(20,player.transform.position-Vector3.forward);float ultHp=player.Health;player.AddUltimateCharge(100);
             InputSystem.QueueStateEvent(mouse,new MouseState{buttons=1});Keys(Key.Digit1,Key.R);int beforeShot=game.ShotsFired;yield return new WaitForSeconds(.2f);
             bool ultBlocked=game.ShotsFired==beforeShot&&player.Weapon.CurrentWeapon==selected&&!player.Weapon.IsReloading;
-            InputSystem.QueueStateEvent(mouse,new MouseState());Keys();yield return new WaitForSeconds(.39f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v4-ultimate.png"));
+            InputSystem.QueueStateEvent(mouse,new MouseState());Keys();yield return new WaitForSeconds(.39f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,"iron-pulse-v5-ultimate.png"));
             float maxFov=player.ViewCamera.fieldOfView;float started=Time.time;
             while(player.IsUltimateActive&&Time.time-started<2f){yield return null;maxFov=Mathf.Max(maxFov,player.ViewCamera.fieldOfView);}
             int dead=0;foreach(var target in crowd)if(target.IsDead)dead++;
@@ -256,6 +301,8 @@ namespace IronPulse
             CheckStyle(IPExecutionStyle.RisingCut,new Vector3(0,.7f,-2),Vector3.up*6,Vector3.back,false);
             CheckStyle(IPExecutionStyle.AerialPlunge,new Vector3(0,3,-1),Vector3.down*9,Vector3.back,false);
             CheckStyle(IPExecutionStyle.RearCut,new Vector3(0,0,2),Vector3.zero,Vector3.back,false);
+            CheckStyle(IPExecutionStyle.BackstepCrush,new Vector3(0,0,-2),Vector3.back*8,Vector3.back,false);
+            CheckStyle(IPExecutionStyle.TwinArmBreak,new Vector3(0,0,-1.5f),Vector3.zero,Vector3.back,false);
         }
         void CheckStyle(IPExecutionStyle expected,Vector3 position,Vector3 velocity,Vector3 targetForward,bool dashing)
         {

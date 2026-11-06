@@ -213,7 +213,7 @@ namespace IronPulse
             Text(50,357,"FLESH. STEEL. SURVIVAL.",Color.white,21);
             Rect(50,414,455,2,new Color(.24f,.3f,.34f));
             Text(50,436,"WASD",cyan,17);Text(195,436,"MOVE",Color.white,17);
-            Text(50,464,"SHIFT",cyan,17);Text(195,464,"DIRECTIONAL DASH",Color.white,17);
+            Text(50,464,"SHIFT ×2",cyan,17);Text(195,464,"TWO DIRECTIONAL DASHES",Color.white,17);
             Text(50,492,"SPACE ×2",cyan,17);Text(195,492,"DOUBLE JUMP",Color.white,17);
             Text(50,520,"LMB / R",cyan,17);Text(195,520,"FIRE / SXS RELOAD",Color.white,17);
             Text(50,548,"1 / 2 / 3",cyan,17);Text(195,548,"PISTOL / RIFLE / SXS",Color.white,16);
@@ -248,8 +248,9 @@ namespace IronPulse
             else {Text(972,632,"∞",orange,48);Text(1040,651,"UNLIMITED",Color.white,18);Text(1041,681,"NO RELOAD",new Color(.55f,.67f,.7f),11);}
             for(int i=0;i<3;i++){bool active=(int)weapon.CurrentWeapon==i;Rect(957+i*98,576,91,24,active?new Color(.5f,.16f,.05f,.9f):new Color(.02f,.035f,.05f,.8f));Text(963+i*98,579,(i+1)+" "+new[]{"PISTOL","RIFLE","SXS"}[i],active?Color.white:new Color(.5f,.6f,.65f),12);}
             if(weapon.IsReloading){Rect(974,667,210*Mathf.Clamp01(weapon.ReloadProgress),3,cyan);Text(1100,682,weapon.ReloadPhase.ToUpperInvariant(),cyan,10);}
-            for(int i=0;i<2;i++)Rect(557+i*91,668,76,5,(i==0?Player.DashCooldown01<=.01f:Player.JumpsRemaining>0)?cyan:new Color(.2f,.3f,.35f));
-            Text(552,683,"DASH     AIR",new Color(.5f,.7f,.75f),12);
+            for(int i=0;i<2;i++){Rect(546+i*42,668,36,5,i<Player.DashCharges?cyan:new Color(.2f,.3f,.35f));Rect(648+i*42,668,36,5,i<Player.JumpsRemaining?cyan:new Color(.2f,.3f,.35f));}
+            if(Player.DashCharges<IPPlayer.MaxDashCharges)Rect(546,678,78*Player.DashRechargeProgress01,2,orange);
+            Text(544,683,"DASH "+Player.DashCharges+"/2    AIR",new Color(.5f,.7f,.75f),12);
             Color ultimateColor=Player.UltimateReady?orange:cyan;
             Rect(519,606,242,43,new Color(ink.r,ink.g,ink.b,.84f));
             Text(530,611,Player.IsUltimateActive?"RAMPAGE":Player.UltimateReady?"[ F ]  UNLEASH KATANA":"[ F ]  LEFT FIST",ultimateColor,14);
@@ -267,7 +268,7 @@ namespace IronPulse
         }
         public static string ExecutionName(IPExecutionStyle style)
         {
-            switch(style){case IPExecutionStyle.StrafeLeft:return "LEFT CROSSCUT";case IPExecutionStyle.StrafeRight:return "RIGHT CROSSCUT";case IPExecutionStyle.DashThrust:return "DASH IMPALEMENT";case IPExecutionStyle.RisingCut:return "RISING SEVER";case IPExecutionStyle.AerialPlunge:return "DEATH FROM ABOVE";case IPExecutionStyle.RearCut:return "TURN AND TEAR";default:return "CROSS SLASH";}
+            switch(style){case IPExecutionStyle.BackstepCrush:return "KNEECAP AND CRUSH";case IPExecutionStyle.TwinArmBreak:return "TWIN ARM BREAK";case IPExecutionStyle.StrafeLeft:return "LEFT CROSSCUT";case IPExecutionStyle.StrafeRight:return "RIGHT CROSSCUT";case IPExecutionStyle.DashThrust:return "DASH IMPALEMENT";case IPExecutionStyle.RisingCut:return "RISING SEVER";case IPExecutionStyle.AerialPlunge:return "DEATH FROM ABOVE";case IPExecutionStyle.RearCut:return "TURN AND TEAR";default:return "CROSS SLASH";}
         }
         void OnDestroy()
         {Time.timeScale=1;IsPaused=false;Cursor.lockState=CursorLockMode.None;Cursor.visible=true;if(pixels){pixels.Release();Destroy(pixels);}if(Instance==this)Instance=null;}

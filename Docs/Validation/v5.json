@@ -1,0 +1,354 @@
+{
+    "game": "IRON PULSE",
+    "unity": "6000.0.37f1",
+    "allPassed": true,
+    "averageFrameMilliseconds": 10.013797760009766,
+    "sampledFrames": 4828,
+    "checks": [
+        {
+            "name": "WASD movement",
+            "passed": true,
+            "detail": "distance=2,74"
+        },
+        {
+            "name": "Directional dash",
+            "passed": true,
+            "detail": "distance=4,45, cooldown=0,82"
+        },
+        {
+            "name": "Two consecutive directional dashes",
+            "passed": true,
+            "detail": "accepted=2, charges=0, right=6,03, left=4,28"
+        },
+        {
+            "name": "Third dash blocked while empty",
+            "passed": true,
+            "detail": "accepted=2, charges=0"
+        },
+        {
+            "name": "Dash charges recharge serially",
+            "passed": true,
+            "detail": "charges=1, progress=0,20"
+        },
+        {
+            "name": "Holding Shift does not repeat dash",
+            "passed": true,
+            "detail": "accepted=2"
+        },
+        {
+            "name": "Recharged dash usable immediately",
+            "passed": true,
+            "detail": "accepted=3, charges=0"
+        },
+        {
+            "name": "Both dash charges fully recover",
+            "passed": true,
+            "detail": "charges=2"
+        },
+        {
+            "name": "Double dash in air preserves jumps",
+            "passed": true,
+            "detail": "charges=0, jumps=2, height=4,46"
+        },
+        {
+            "name": "Pause freezes dash recharge",
+            "passed": true,
+            "detail": "charges=1, remaining=1,00"
+        },
+        {
+            "name": "Restart restores both dash charges",
+            "passed": true,
+            "detail": "charges=2"
+        },
+        {
+            "name": "Double jump",
+            "passed": true,
+            "detail": "remaining=0, rise=3,31"
+        },
+        {
+            "name": "Shotgun fires",
+            "passed": true,
+            "detail": "loaded shells=1"
+        },
+        {
+            "name": "Fast break action reload",
+            "passed": true,
+            "detail": "seconds=0,92, shells=2"
+        },
+        {
+            "name": "Physical shell insertion",
+            "passed": true,
+            "detail": "visible paired rounds=True, travel=0,726"
+        },
+        {
+            "name": "Stable reload camera",
+            "passed": true,
+            "detail": "maximum eye step=0,000"
+        },
+        {
+            "name": "Temporary orange stagger",
+            "passed": true,
+            "detail": "CanExecute=True"
+        },
+        {
+            "name": "Glory kill + health",
+            "passed": true,
+            "detail": "health=45 -> 80, executions=1"
+        },
+        {
+            "name": "Smooth execution camera exit",
+            "passed": true,
+            "detail": "exit rotation step=0,00 degrees"
+        },
+        {
+            "name": "Physical severed victim sections",
+            "passed": true,
+            "detail": "severed limb/body groups present"
+        },
+        {
+            "name": "Victim turns toward player",
+            "passed": true,
+            "detail": "grab turned the rear-facing victim"
+        },
+        {
+            "name": "Victim reacts during finisher",
+            "passed": true,
+            "detail": "head displacement=0,588"
+        },
+        {
+            "name": "Enemy projectile damage",
+            "passed": true,
+            "detail": "health=100 -> 89"
+        },
+        {
+            "name": "Smooth retro framebuffer",
+            "passed": true,
+            "detail": "target=1920x1080"
+        },
+        {
+            "name": "SMAA smoothing",
+            "passed": true,
+            "detail": "antialiasing=SubpixelMorphologicalAntiAliasing"
+        },
+        {
+            "name": "Katana selection / Frontal",
+            "passed": true,
+            "detail": "selected=Frontal"
+        },
+        {
+            "name": "Katana selection / StrafeLeft",
+            "passed": true,
+            "detail": "selected=StrafeLeft"
+        },
+        {
+            "name": "Katana selection / StrafeRight",
+            "passed": true,
+            "detail": "selected=StrafeRight"
+        },
+        {
+            "name": "Katana selection / DashThrust",
+            "passed": true,
+            "detail": "selected=DashThrust"
+        },
+        {
+            "name": "Katana selection / RisingCut",
+            "passed": true,
+            "detail": "selected=RisingCut"
+        },
+        {
+            "name": "Katana selection / AerialPlunge",
+            "passed": true,
+            "detail": "selected=AerialPlunge"
+        },
+        {
+            "name": "Katana selection / RearCut",
+            "passed": true,
+            "detail": "selected=RearCut"
+        },
+        {
+            "name": "Katana selection / BackstepCrush",
+            "passed": true,
+            "detail": "selected=BackstepCrush"
+        },
+        {
+            "name": "Katana selection / TwinArmBreak",
+            "passed": true,
+            "detail": "selected=TwinArmBreak"
+        },
+        {
+            "name": "Pistol slot",
+            "passed": true,
+            "detail": "kind=Pistol, capacity=12"
+        },
+        {
+            "name": "Pistol semiautomatic",
+            "passed": true,
+            "detail": "held trigger fired 1 round(s)"
+        },
+        {
+            "name": "Pistol unlimited, reload removed",
+            "passed": true,
+            "detail": "loaded=12, reload=False"
+        },
+        {
+            "name": "Rifle slot",
+            "passed": true,
+            "detail": "kind=Rifle, capacity=30"
+        },
+        {
+            "name": "Rifle sustained unlimited automatic fire",
+            "passed": true,
+            "detail": "burst fired 36 rounds, reserve=30"
+        },
+        {
+            "name": "Shotgun slot",
+            "passed": true,
+            "detail": "kind=Shotgun"
+        },
+        {
+            "name": "Unlimited weapon switching",
+            "passed": true,
+            "detail": "rifle available=30"
+        },
+        {
+            "name": "Rifle reload removed",
+            "passed": true,
+            "detail": "reload=False"
+        },
+        {
+            "name": "E during directional dash",
+            "passed": true,
+            "detail": "style=DashThrust, health=85"
+        },
+        {
+            "name": "E while falling from above",
+            "passed": true,
+            "detail": "style=AerialPlunge, health=85"
+        },
+        {
+            "name": "Live finisher / Frontal",
+            "passed": true,
+            "detail": "style=Frontal, lethal=True, health=85, executions=1"
+        },
+        {
+            "name": "Live finisher / StrafeLeft",
+            "passed": true,
+            "detail": "style=StrafeLeft, lethal=True, health=85, executions=1"
+        },
+        {
+            "name": "Live finisher / StrafeRight",
+            "passed": true,
+            "detail": "style=StrafeRight, lethal=True, health=85, executions=1"
+        },
+        {
+            "name": "Live finisher / RisingCut",
+            "passed": true,
+            "detail": "style=RisingCut, lethal=True, health=85, executions=1"
+        },
+        {
+            "name": "Live finisher / RearCut",
+            "passed": true,
+            "detail": "style=RearCut, lethal=True, health=85, executions=1"
+        },
+        {
+            "name": "Live finisher / BackstepCrush",
+            "passed": true,
+            "detail": "style=BackstepCrush, lethal=True, health=85, executions=1"
+        },
+        {
+            "name": "Backstep sweep and capped skull fracture",
+            "passed": true,
+            "detail": "physical sections=5, capped cuts=True"
+        },
+        {
+            "name": "Live finisher / TwinArmBreak",
+            "passed": true,
+            "detail": "style=TwinArmBreak, lethal=True, health=85, executions=1"
+        },
+        {
+            "name": "Twin arm breaks precede lethal neck cut",
+            "passed": true,
+            "detail": "nonlethal arm breaks=True, physical sections=4"
+        },
+        {
+            "name": "F is left fist without charge",
+            "passed": true,
+            "detail": "damage=34, hits=1"
+        },
+        {
+            "name": "Weapon lowered and blocked during punch",
+            "passed": true,
+            "detail": "shots=0, restored=True"
+        },
+        {
+            "name": "Melee builds ultimate charge",
+            "passed": true,
+            "detail": "charge=6"
+        },
+        {
+            "name": "F punch respects walls",
+            "passed": true,
+            "detail": "blocked health=112"
+        },
+        {
+            "name": "Ultimate charge reaches ready",
+            "passed": true,
+            "detail": "charge=100"
+        },
+        {
+            "name": "F charged ultimate cuts the crowd",
+            "passed": true,
+            "detail": "crowd killed=3, total=3"
+        },
+        {
+            "name": "Ultimate consumes charge without self refill",
+            "passed": true,
+            "detail": "charge=0"
+        },
+        {
+            "name": "Ultimate obeys solid barriers",
+            "passed": true,
+            "detail": "protected health=154"
+        },
+        {
+            "name": "Ultimate blocks guns and protects player",
+            "passed": true,
+            "detail": "blocked=True, health=100"
+        },
+        {
+            "name": "Ultimate restores weapon and bounded camera",
+            "passed": true,
+            "detail": "max fov=99,68"
+        },
+        {
+            "name": "F returns to punch after ultimate",
+            "passed": true,
+            "detail": "fallback punch=True"
+        },
+        {
+            "name": "Recorded high quality audio library",
+            "passed": true,
+            "detail": "clips=52, missing banks=0"
+        },
+        {
+            "name": "Background music removed",
+            "passed": true,
+            "detail": "looping sources=False"
+        },
+        {
+            "name": "Real HDRP lighting and shadows",
+            "passed": true,
+            "detail": "enabled lights=17, shadow casters=4"
+        },
+        {
+            "name": "PBR arena surfaces",
+            "passed": true,
+            "detail": "lit, shadow receiving renderers=677"
+        },
+        {
+            "name": "No runtime errors during live checks",
+            "passed": true,
+            "detail": "No errors, exceptions or assertions"
+        }
+    ]
+}

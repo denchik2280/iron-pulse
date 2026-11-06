@@ -18,6 +18,10 @@ namespace IronPulse
   public int MagazineCapacity => Weapon != null ? Weapon.Capacity : 2;
   public string WeaponDisplayName => Weapon != null ? Weapon.WeaponName : "DOUBLE BARREL";
   public float DashCooldown01 => Mathf.Clamp01(dashCooldown / DashRecovery);
+  public const int MaxDashCharges = 2;
+  public int DashCharges { get; private set; } = MaxDashCharges;
+  public int DashesPerformed { get; private set; }
+  public float DashRechargeProgress01 => DashCharges == MaxDashCharges ? 1f : 1f-DashCooldown01;
   public int JumpsRemaining { get; private set; } = 2;
   public float DamageFlash { get; private set; }
   public float HitConfirm { get; private set; }
@@ -27,7 +31,7 @@ namespace IronPulse
   const float Speed = 11.4f, DashRecovery = .72f, EyeHeight = 1.58f;
   CharacterController controller;
   Vector3 horizontalVelocity, dashDirection, spawnPoint;
-  float verticalVelocity, yaw, pitch, dashCooldown, dashRemaining, coyoteTime, jumpBuffer, hitProtection;
+  float verticalVelocity, yaw, pitch, dashCooldown, dashRemaining, dashRetriggerDelay, coyoteTime, jumpBuffer, hitProtection;
   float bobPhase, cameraRoll, landingKick, trauma, recoil, candidateTimer, damageLean, shotLateral, shotPush;
   bool initialized, grounded, wasGrounded;
   IPEnemy executionTarget;
@@ -64,7 +68,7 @@ namespace IronPulse
    trauma = Mathf.MoveTowards(trauma, 0f, dt * 1.9f); recoil = Mathf.MoveTowards(recoil, 0f, dt * 15f);
    landingKick = Mathf.Lerp(landingKick, 0f, 1f - Mathf.Exp(-dt * 12f)); damageLean = Mathf.Lerp(damageLean, 0f, 1f - Mathf.Exp(-dt * 9f));
    shotLateral *= Mathf.Exp(-dt * 17f); shotPush *= Mathf.Exp(-dt * 22f);
-   hitProtection -= dt; dashCooldown = Mathf.Max(0f, dashCooldown - dt);
+   hitProtection -= dt; UpdateDashCharges(dt);
    var keyboard = Keyboard.current; var mouse = Mouse.current;
    bool capturedThisFrame = false;
    if (mouse != null && mouse.leftButton.wasPressedThisFrame && Cursor.lockState != CursorLockMode.Locked && !IsDead)
@@ -110,12 +114,7 @@ namespace IronPulse
     if (airJump) IPGame.Burst(transform.position + Vector3.up * .12f, new Color(.08f, .8f, 1f), 12, 3f);
    }
    Vector3 desiredDirection = transform.right * input.x + transform.forward * input.y;
-   if (hasControl && keyboard != null && (keyboard.leftShiftKey.wasPressedThisFrame || keyboard.rightShiftKey.wasPressedThisFrame) && dashCooldown <= 0f)
-   {
-    dashDirection = desiredDirection.sqrMagnitude > .01f ? desiredDirection.normalized : transform.forward;
-    dashRemaining = .165f; dashCooldown = DashRecovery; trauma = Mathf.Max(trauma, .18f);
-    IPGame.Audio("dash", transform.position, .75f); IPGame.Burst(transform.position + Vector3.up * .4f, new Color(.04f, .6f, 1f), 8, 3f);
-   }
+   if (hasControl && keyboard != null && (keyboard.leftShiftKey.wasPressedThisFrame || keyboard.rightShiftKey.wasPressedThisFrame))TryDash(desiredDirection);
    if (dashRemaining > 0f) { dashRemaining -= dt; horizontalVelocity = dashDirection * 31f; verticalVelocity = Mathf.Max(verticalVelocity, -.5f); }
    else
    {
@@ -136,6 +135,27 @@ namespace IronPulse
    candidateTimer -= dt;
    if (candidateTimer <= 0f) { candidateTimer = .055f; FindExecutionTarget(); }
    if (hasControl && keyboard != null && keyboard.eKey.wasPressedThisFrame && ExecutionCandidate != null) BeginExecution(ExecutionCandidate);
+  }
+
+  void UpdateDashCharges(float dt)
+  {
+   dashRetriggerDelay=Mathf.Max(0f,dashRetriggerDelay-dt);
+   if(DashCharges>=MaxDashCharges)return;
+   dashCooldown-=dt;
+   // A serial recharge queue keeps progress when the second charge is spent.
+   while(dashCooldown<=0f&&DashCharges<MaxDashCharges){DashCharges++;dashCooldown+=DashRecovery;}
+   if(DashCharges==MaxDashCharges)dashCooldown=0f;
+  }
+  public bool TryDash(Vector3 direction)
+  {
+   if(!initialized||IsDead||IsExecuting||IPGame.IsPaused||DashCharges<=0||dashRetriggerDelay>0f)return false;
+   direction=Vector3.ProjectOnPlane(direction,Vector3.up);
+   dashDirection=direction.sqrMagnitude>.01f?direction.normalized:transform.forward;
+   if(DashCharges==MaxDashCharges)dashCooldown=DashRecovery;
+   DashCharges--;DashesPerformed++;dashRemaining=.165f;dashRetriggerDelay=.09f;
+   trauma=Mathf.Max(trauma,.18f);
+   IPGame.Audio("dash",transform.position,.75f);IPGame.Burst(transform.position+Vector3.up*.4f,new Color(.04f,.6f,1f),8,3f);
+   return true;
   }
 
   void UpdateCamera(float dt, float movement, float strafe)
@@ -166,10 +186,13 @@ namespace IronPulse
    Vector3 horizontal = Vector3.ProjectOnPlane(velocity, Vector3.up);
    if (dashing || horizontal.magnitude > 18f) return IPExecutionStyle.DashThrust;
    float lateral = Vector3.Dot(horizontal, right.normalized);
+   float longitudinal=Vector3.Dot(horizontal,forward.normalized);
+   if(longitudinal<-3f&&-longitudinal>Mathf.Abs(lateral)*1.15f)return IPExecutionStyle.BackstepCrush;
    if (lateral < -3f) return IPExecutionStyle.StrafeLeft;
    if (lateral > 3f) return IPExecutionStyle.StrafeRight;
    Vector3 fromTarget = Vector3.ProjectOnPlane(playerPosition - targetPosition, Vector3.up).normalized;
    if (Vector3.Dot(Vector3.ProjectOnPlane(targetForward, Vector3.up).normalized, fromTarget) < -.35f) return IPExecutionStyle.RearCut;
+   if(Vector3.ProjectOnPlane(playerPosition-targetPosition,Vector3.up).sqrMagnitude<=1.65f*1.65f)return IPExecutionStyle.TwinArmBreak;
    return IPExecutionStyle.Frontal;
   }
 
@@ -256,8 +279,8 @@ namespace IronPulse
    executionFocus = target.ExecutionPoint; executionRight = transform.right; executionForward = transform.forward;
    executionCut = style == IPExecutionStyle.AerialPlunge ? Vector3.down : style == IPExecutionStyle.RisingCut ? (Vector3.up + executionRight * .35f).normalized :
                   style == IPExecutionStyle.StrafeLeft ? -executionRight : style == IPExecutionStyle.StrafeRight ? executionRight :
-                  style == IPExecutionStyle.DashThrust ? executionForward : (executionRight + Vector3.down * .42f).normalized;
-   executionDuration = style == IPExecutionStyle.AerialPlunge ? 1.24f : style == IPExecutionStyle.RearCut ? 1.14f : style == IPExecutionStyle.Frontal ? 1.12f : style == IPExecutionStyle.DashThrust ? .92f : 1.04f;
+                  style == IPExecutionStyle.DashThrust ? executionForward : style==IPExecutionStyle.BackstepCrush||style==IPExecutionStyle.TwinArmBreak?executionRight:(executionRight + Vector3.down * .42f).normalized;
+   executionDuration = style == IPExecutionStyle.TwinArmBreak ? 1.26f : style == IPExecutionStyle.BackstepCrush||style == IPExecutionStyle.AerialPlunge ? 1.24f : style == IPExecutionStyle.RearCut ? 1.14f : style == IPExecutionStyle.Frontal ? 1.12f : style == IPExecutionStyle.DashThrust ? .92f : 1.04f;
    executionTime = executionHitStop = 0f; executionHit = executionGrabHit = false; executionLookStart = ViewCamera.transform.rotation;
    executionEyeStart = ViewCamera.transform.localPosition; executionFovStart = ViewCamera.fieldOfView;
    IsExecuting = true; ExecutionCandidate = null; horizontalVelocity = Vector3.zero; verticalVelocity = 0f; dashRemaining = 0f;
@@ -303,7 +326,8 @@ namespace IronPulse
    float impactAt = CurrentExecutionStyle == IPExecutionStyle.Frontal ? .58f : .52f;
    float punch = ContactPulse(t, impactAt, .075f);
    float handImpact=ContactPulse(t,.31f,.065f);
-   float rip = (CurrentExecutionStyle == IPExecutionStyle.Frontal || CurrentExecutionStyle == IPExecutionStyle.RearCut || CurrentExecutionStyle == IPExecutionStyle.DashThrust) ? ContactPulse(t, .735f, .075f) : 0f;
+   if(CurrentExecutionStyle==IPExecutionStyle.TwinArmBreak)handImpact+=ContactPulse(t,.42f,.055f);
+   float rip = (CurrentExecutionStyle == IPExecutionStyle.Frontal || CurrentExecutionStyle == IPExecutionStyle.RearCut || CurrentExecutionStyle == IPExecutionStyle.DashThrust || CurrentExecutionStyle==IPExecutionStyle.BackstepCrush || CurrentExecutionStyle==IPExecutionStyle.TwinArmBreak) ? ContactPulse(t, .735f, .075f) : 0f;
    float wind = Mathf.Sin(Mathf.Clamp01(t / .87f) * Mathf.PI);
    wind *= wind;
    float side = CurrentExecutionStyle == IPExecutionStyle.StrafeLeft ? -1f : 1f;
@@ -361,6 +385,8 @@ namespace IronPulse
     case IPExecutionStyle.StrafeLeft: return "KATANA // LEFT CROSSCUT";
     case IPExecutionStyle.StrafeRight: return "KATANA // RIGHT CROSSCUT";
     case IPExecutionStyle.RearCut: return "GRAB // TURN AND TEAR";
+    case IPExecutionStyle.BackstepCrush: return "KATANA // KNEECAP AND CRUSH";
+    case IPExecutionStyle.TwinArmBreak: return "GRAB // TWIN ARM BREAK";
     default: return "KATANA // DOUBLE DISSECTION";
    }
   }
@@ -371,7 +397,7 @@ namespace IronPulse
    if (executionTarget != null && !executionTarget.IsDead) executionTarget.CancelExecution();
    spawnPoint = spawn; if (controller != null) controller.enabled = false;
    transform.position = spawn; Health = 100f; horizontalVelocity = Vector3.zero; verticalVelocity = 0f;
-   pitch = 0f; yaw = transform.eulerAngles.y; dashRemaining = dashCooldown = 0f; trauma = recoil = DamageFlash = 0f;
+   pitch = 0f; yaw = transform.eulerAngles.y; dashRemaining = dashCooldown = dashRetriggerDelay = 0f;DashCharges=MaxDashCharges;DashesPerformed=0;trauma = recoil = DamageFlash = 0f;
    IsExecuting = false; executionTime = executionHitStop = 0f; CurrentExecutionStyle = IPExecutionStyle.Frontal;
    cameraRoll = landingKick = damageLean = shotLateral = shotPush = hitProtection = coyoteTime = jumpBuffer = candidateTimer = HitConfirm = 0f; grounded = wasGrounded = false;
    if (ViewCamera != null) { ViewCamera.transform.localPosition = Vector3.up * EyeHeight; ViewCamera.transform.localRotation = Quaternion.identity; ViewCamera.fieldOfView = 94f; }

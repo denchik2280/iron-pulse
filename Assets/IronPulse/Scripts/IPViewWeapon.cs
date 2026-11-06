@@ -54,6 +54,8 @@ namespace IronPulse
         Quaternion specialRigRotation,specialMechanismRotation,recoveryRigRotation;
         readonly float[] handTimes={0f,.105f,.23f,.285f,.355f,.425f,.60f,.68f,.755f,.855f,1f};
         readonly SwordPose[] handPoses=new SwordPose[11];
+        readonly float[] brutalityHandTimes={0f,.095f,.20f,.275f,.32f,.37f,.42f,.475f,.52f,.61f,.68f,.735f,.82f,.91f,1f};
+        readonly SwordPose[] brutalityHandPoses=new SwordPose[15];
         readonly float[] punchTimes={0f,.15f,.235f,.34f,.39f,.53f,.76f,1f};
         readonly SwordPose[] punchPoses=new SwordPose[8];
         int lastBarrel, pendingWeapon = -1;
@@ -964,9 +966,19 @@ namespace IronPulse
         public void SetExecutionProgress(float progress)
         {
             float previous=executionProgress;executionProgress=Mathf.Clamp01(progress);
-            float strike=executionStyle==IPExecutionStyle.Frontal? .49f:.435f;
+            bool backstep=executionStyle==IPExecutionStyle.BackstepCrush,twin=executionStyle==IPExecutionStyle.TwinArmBreak;
+            float strike=executionStyle==IPExecutionStyle.Frontal? .49f:twin?.465f:.435f;
             if(previous<strike&&progress>=strike)IPGame.Audio("katana_swing",viewCamera.transform.position,.8f);
-            if(previous<.285f&&progress>=.285f)IPGame.Audio("melee_swing",viewCamera.transform.position,.45f);
+            if(backstep)
+            {
+                if(previous<.22f&&progress>=.22f)IPGame.Audio("execute_grab",viewCamera.transform.position,.38f);
+                if(previous<.675f&&progress>=.675f)IPGame.Audio("melee_swing",viewCamera.transform.position,.48f);
+            }
+            else
+            {
+                if(previous<.285f&&progress>=.285f)IPGame.Audio("melee_swing",viewCamera.transform.position,.45f);
+                if(twin&&previous<.375f&&progress>=.375f)IPGame.Audio("melee_swing",viewCamera.transform.position,.5f);
+            }
             if(previous<.715f&&progress>=.715f)
                 IPGame.Audio("execute_rip",viewCamera.transform.position,.65f);
             // Root calls this after its camera/victim step. Apply now as well as Tick so
@@ -1066,6 +1078,29 @@ namespace IronPulse
             SwordPose wind,contact,follow,withdraw;
             switch(executionStyle)
             {
+                case IPExecutionStyle.BackstepCrush:
+                    // The edge stays low through the knee sweep. Only after the cut does
+                    // the sword clear the victim, leaving the bare hand to drive the skull down.
+                    swordTimes=new[]{0f,.10f,.22f,.34f,.42f,.475f,.52f,.565f,.635f,.69f,.735f,.82f,.92f,1f};
+                    swordPoses=new[]{enter,P(.29f,-.18f,.01f,-21f,36f,-23f),P(.39f,-.33f,.02f,24f,69f,-60f),
+                        P(.42f,-.43f,-.035f,34f,75f,-71f),P(.40f,-.45f,.035f,29f,66f,-72f),
+                        P(.27f,-.50f,.27f,25f,36f,-83f),P(-.10f,-.60f,.64f,30f,-12f,-96f),
+                        P(-.49f,-.53f,.25f,38f,-98f,-112f),P(-.38f,-.34f,.06f,8f,-72f,-63f),
+                        P(.29f,-.19f,.075f,-10f,35f,24f),P(.28f,-.12f,.11f,12f,34f,54f),
+                        P(.31f,-.18f,.015f,-10f,28f,-23f),recovery,exit};
+                    BuildSwordTangents();return;
+                case IPExecutionStyle.TwinArmBreak:
+                    // Two short guard-leverage arcs precede a separate neck-height cut.
+                    // The reversal keys carry angular momentum through each break.
+                    swordTimes=new[]{0f,.10f,.20f,.275f,.32f,.37f,.42f,.465f,.52f,.565f,.635f,.68f,.735f,.82f,.91f,1f};
+                    swordPoses=new[]{enter,P(.26f,-.12f,.07f,-18f,29f,-28f),P(.31f,-.05f,.22f,13f,38f,-36f),
+                        P(.23f,-.08f,.32f,18f,65f,-40f),P(.13f,-.20f,.38f,34f,-9f,-80f),
+                        P(-.20f,-.07f,.19f,-14f,-48f,-52f),P(-.35f,-.23f,.41f,28f,-77f,-97f),
+                        P(.38f,.26f,-.01f,-65f,50f,65f),P(-.04f,.13f,.64f,12f,-15f,91f),
+                        P(-.43f,-.08f,.17f,24f,-95f,113f),P(-.34f,-.10f,.08f,4f,-65f,70f),
+                        P(.30f,-.08f,.07f,-24f,49f,-26f),P(.32f,-.14f,.05f,-14f,41f,-36f),
+                        P(.31f,-.15f,.02f,-19f,34f,-31f),recovery,exit};
+                    BuildSwordTangents();return;
                 case IPExecutionStyle.StrafeLeft:
                     wind=P(-.36f,.16f,.08f,-35f,-58f,-69f);contact=P(-.12f,-.04f,.44f,9f,2f,-94f);
                     follow=P(.40f,-.21f,.13f,24f,86f,-115f);withdraw=P(.31f,-.17f,.04f,22f,60f,-72f);break;
@@ -1181,11 +1216,24 @@ namespace IronPulse
             float shoulderLoad=Window(t,.08f,.37f,.12f);
             viewRoot.localPosition+=new Vector3(-.017f*shoulderLoad-.010f*tear,-.011f*contact,-.014f*contact+.016f*tear);
             viewRoot.localRotation*=Quaternion.Euler(contact*1.6f-tear*1.2f,shoulderLoad*1.5f,shoulderLoad*1.4f-tear*2.1f);
+            if(executionStyle==IPExecutionStyle.BackstepCrush||executionStyle==IPExecutionStyle.TwinArmBreak)
+            {
+                float torque=executionStyle==IPExecutionStyle.TwinArmBreak?
+                    ContactRebound(t,.32f,.18f)-ContactRebound(t,.42f,.18f):ContactRebound(t,.735f,.22f);
+                viewRoot.localRotation*=Quaternion.Euler(torque*1.1f,torque*1.2f,-torque*1.6f);
+            }
             swordRoot.localPosition=pose.position;swordRoot.localRotation=pose.rotation;
             swordRightHand.localPosition=swordRightHome;swordRightHand.localRotation=Quaternion.Euler(0f,0f,-12f);
             Vector3 shoulder=hasExecutionVictim?viewRoot.InverseTransformPoint(executionShoulder):new Vector3(-.30f,.01f,.65f);
             Vector3 chest=hasExecutionVictim?viewRoot.InverseTransformPoint(executionChest):new Vector3(-.18f,-.03f,.70f);
             Vector3 head=hasExecutionVictim?viewRoot.InverseTransformPoint(executionHead):new Vector3(-.16f,.32f,.65f);
+            if(executionStyle==IPExecutionStyle.BackstepCrush||executionStyle==IPExecutionStyle.TwinArmBreak)
+            {
+                ApplyBrutalityHand(t,shoulder,chest,head);
+                bool lowSweep=executionStyle==IPExecutionStyle.BackstepCrush;
+                if(bladeTrail)bladeTrail.emitting=lowSweep?t>.435f&&t<.60f:t>.465f&&t<.60f;
+                UpdateArms();return;
+            }
             bool frontal=executionStyle==IPExecutionStyle.Frontal;
             handTimes[4]=frontal?.355f:.31f;
             bool side=executionStyle==IPExecutionStyle.StrafeLeft||executionStyle==IPExecutionStyle.StrafeRight;
@@ -1223,6 +1271,59 @@ namespace IronPulse
             bool slashWindow=t>strike-.105f&&t<strike+.085f;
             if(bladeTrail)bladeTrail.emitting=slashWindow;
             UpdateArms();
+        }
+
+        void ApplyBrutalityHand(float t,Vector3 shoulder,Vector3 chest,Vector3 head)
+        {
+            // Both tracks are evaluated from live skeleton anchors. In particular the hand
+            // stays on the descending skull instead of pushing at its old standing position.
+            brutalityHandPoses[0]=new SwordPose{position=freeHandStart,rotation=freeHandStartRotation};
+            brutalityHandPoses[1]=P(-.32f,-.10f,.16f,-6f,-25f,-29f);
+            Vector3 crownUp=head-chest;
+            crownUp=crownUp.sqrMagnitude>.001f?crownUp.normalized:Vector3.up;
+            if(executionStyle==IPExecutionStyle.BackstepCrush)
+            {
+                Vector3 shoulderGrip=shoulder+new Vector3(-.025f,.025f,-.13f);
+                Vector3 skullGrip=head+crownUp*.17f+Vector3.back*.12f;
+                Quaternion crown=Quaternion.Euler(108f,-16f,-31f);
+                brutalityHandPoses[2]=new SwordPose{position=shoulderGrip,rotation=Quaternion.Euler(55f,-18f,-30f)};
+                brutalityHandPoses[3]=new SwordPose{position=skullGrip+new Vector3(-.025f,.045f,-.035f),rotation=crown};
+                brutalityHandPoses[4]=new SwordPose{position=skullGrip,rotation=crown};
+                brutalityHandPoses[5]=new SwordPose{position=skullGrip,rotation=crown*Quaternion.Euler(0f,-3f,-3f)};
+                brutalityHandPoses[6]=new SwordPose{position=skullGrip+Vector3.back*.012f,rotation=crown*Quaternion.Euler(-2f,-5f,-5f)};
+                brutalityHandPoses[7]=new SwordPose{position=skullGrip,rotation=crown*Quaternion.Euler(-4f,-5f,-7f)};
+                brutalityHandPoses[8]=new SwordPose{position=skullGrip,rotation=crown*Quaternion.Euler(-6f,-8f,-8f)};
+                brutalityHandPoses[9]=new SwordPose{position=skullGrip+Vector3.back*.025f,rotation=crown*Quaternion.Euler(-9f,-12f,-9f)};
+                brutalityHandPoses[10]=new SwordPose{position=skullGrip,rotation=crown*Quaternion.Euler(-17f,-14f,-12f)};
+                brutalityHandPoses[11]=new SwordPose{position=skullGrip-crownUp*.025f,rotation=crown*Quaternion.Euler(-23f,-15f,-14f)};
+                brutalityHandPoses[12]=new SwordPose{position=skullGrip+new Vector3(-.11f,.065f,-.17f),rotation=Quaternion.Euler(36f,-32f,-55f)};
+                brutalityHandPoses[13]=P(-.31f,-.28f,.13f,2f,-28f,-31f);
+                SetCombatGrip(Window(t,.17f,.77f,.075f));
+            }
+            else
+            {
+                Vector3 first=shoulder+new Vector3(-.018f,-.15f,-.13f);
+                Vector3 opposite=new Vector3(chest.x*2f-shoulder.x,shoulder.y,shoulder.z);
+                Vector3 second=opposite+new Vector3(.025f,-.13f,-.13f);
+                Vector3 neck=head+new Vector3(-.045f,-.06f,-.22f);
+                brutalityHandPoses[2]=new SwordPose{position=first,rotation=Quaternion.Euler(58f,-9f,-28f)};
+                brutalityHandPoses[3]=new SwordPose{position=first,rotation=Quaternion.Euler(52f,-12f,-40f)};
+                brutalityHandPoses[4]=new SwordPose{position=first+new Vector3(-.21f,-.11f,-.20f),rotation=Quaternion.Euler(20f,-35f,-78f)};
+                brutalityHandPoses[5]=new SwordPose{position=second+new Vector3(.04f,.025f,-.04f),rotation=Quaternion.Euler(57f,25f,15f)};
+                brutalityHandPoses[6]=new SwordPose{position=second+new Vector3(.15f,-.13f,-.19f),rotation=Quaternion.Euler(17f,38f,62f)};
+                brutalityHandPoses[7]=new SwordPose{position=neck,rotation=Quaternion.Euler(61f,-7f,-43f)};
+                brutalityHandPoses[8]=new SwordPose{position=neck,rotation=Quaternion.Euler(58f,-14f,-49f)};
+                brutalityHandPoses[9]=new SwordPose{position=neck+new Vector3(-.035f,.06f,-.035f),rotation=Quaternion.Euler(48f,-29f,-58f)};
+                brutalityHandPoses[10]=new SwordPose{position=neck+new Vector3(-.07f,.11f,-.055f),rotation=Quaternion.Euler(29f,-43f,-68f)};
+                brutalityHandPoses[11]=new SwordPose{position=neck+new Vector3(-.23f,.14f,-.22f),rotation=Quaternion.Euler(13f,-61f,-79f)};
+                brutalityHandPoses[12]=P(-.43f,-.12f,.24f,-13f,-35f,-58f);
+                brutalityHandPoses[13]=P(-.33f,-.26f,.10f,-9f,-24f,-30f);
+                float lockGrip=Window(t,.16f,.455f,.055f),neckGrip=Window(t,.465f,.77f,.045f);
+                SetCombatGrip(Mathf.Clamp01(lockGrip+neckGrip));
+            }
+            brutalityHandPoses[14]=P(-.24f,-.49f,-.12f,-12f,-18f,-21f);
+            SwordPose left=EvaluateHand(brutalityHandTimes,brutalityHandPoses,t);
+            swordLeftHand.localPosition=left.position;swordLeftHand.localRotation=left.rotation;
         }
 
         // One controlled, low-frequency recoil lobe. There is no random frame noise or
